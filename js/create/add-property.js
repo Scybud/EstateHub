@@ -1,10 +1,10 @@
 // js/create/add-property.js
 import { insertProperty } from "../data/propertiesDb.js";
+import { insertUnits } from "../data/unitsDb.js";
 import { supabase } from "../supabase.js";
-import {toastMsg} from "../components/toast.js"
+import { toastMsg } from "../components/toast.js";
 
-
-export async function handleFormSteps(orgId) {
+export async function handleFormSteps(orgId, clientId = null) {
   const form = document.getElementById("propertyForm");
   const steps = document.querySelectorAll(".form-step");
   const dots = document.querySelectorAll(".step-dot");
@@ -29,7 +29,6 @@ export async function handleFormSteps(orgId) {
     });
   }
 
-  // --- Map Verification Logic ---
   async function verifyPropertyAddressOnMap() {
     const address = document.getElementById("address").value.trim();
     const neighborhood = document.getElementById("neighborhood").value.trim();
@@ -40,7 +39,6 @@ export async function handleFormSteps(orgId) {
     const latInput = document.getElementById("latitude");
     const lonInput = document.getElementById("longitude");
 
-    // 1. Check if the main street address exists on the map
     const addressQuery = `${address}, ${city}, ${state}, ${country}`;
     try {
       let response = await fetch(
@@ -49,16 +47,15 @@ export async function handleFormSteps(orgId) {
       let data = await response.json();
 
       if (data && data.length > 0) {
-        // Main address found! Extract and save coordinates for this property
         if (latInput) latInput.value = parseFloat(data[0].lat).toFixed(6);
         if (lonInput) lonInput.value = parseFloat(data[0].lon).toFixed(6);
         return true;
       }
 
-      // 2. Main address doesn't exist -> Fallback to Neighborhood validation
       if (!neighborhood) {
         toastMsg(
-          "The address isn't found on the map. Please add a neighborhood for an approximate location.", "error"
+          "The address isn't found on the map. Please add a neighborhood for an approximate location.",
+          "error",
         );
         document.getElementById("neighborhood").focus();
         return false;
@@ -71,22 +68,22 @@ export async function handleFormSteps(orgId) {
       data = await response.json();
 
       if (data && data.length > 0) {
-        // Neighborhood fallback matches! Store the fallback approximate coordinates
         if (latInput) latInput.value = parseFloat(data[0].lat).toFixed(6);
         if (lonInput) lonInput.value = parseFloat(data[0].lon).toFixed(6);
         toastMsg(
-          `Exact address not found on map. Pinning approximate location using neighborhood: "${neighborhood}".`, "warning"
+          `Exact address not found on map. Pinning approximate location using neighborhood: "${neighborhood}".`,
+          "warning",
         );
         return true;
       } else {
         toastMsg(
-          "Neither the address nor the neighborhood could be located on the map. Please verify your spelling.", "error"
+          "Neither the address nor the neighborhood could be located on the map. Please verify your spelling.",
+          "error",
         );
         return false;
       }
     } catch (error) {
       console.error("Map verification failed:", error);
-      // Fallback: system issue shouldn't block user forever, but let's warn them
       return true;
     }
   }
@@ -105,8 +102,6 @@ export async function handleFormSteps(orgId) {
       });
 
       if (allValid) {
-        // --- SAFE DETECTION WAY ---
-        // Instead of parsing numbers, we verify if the address field is sitting inside our active container view.
         const addressField = document.getElementById("address");
         if (addressField && currentStepElement.contains(addressField)) {
           const originalText = btn.innerText;
@@ -118,7 +113,6 @@ export async function handleFormSteps(orgId) {
           btn.innerText = originalText;
           btn.disabled = false;
 
-          // If validation fails requirements, stop right here and block moving to step 6
           if (!addressIsValidOnMap) {
             return;
           }
@@ -224,6 +218,15 @@ export async function handleFormSteps(orgId) {
       return val && val.trim() !== "" ? parseInt(val, 10) : null;
     };
 
+    const unitsPayload = unitsContainer
+      ? Array.from(unitsContainer.querySelectorAll(".unit-card")).map(
+          (card) => ({
+            name: card.querySelector('input[name="unit_name[]"]').value.trim(),
+            unit_type: card.querySelector('select[name="unit_type[]"]').value,
+          }),
+        )
+      : [];
+
     const propertyPayload = {
       title: document.getElementById("title").value.trim(),
       owner_name: document.getElementById("owner_name").value.trim(),
@@ -258,17 +261,6 @@ export async function handleFormSteps(orgId) {
       tax_annual: parseNum("tax_annual"),
       association_fees_monthly: parseNum("association_fees_monthly"),
       currency: "NGN",
-
-      internal_units_json: unitsContainer
-        ? Array.from(unitsContainer.querySelectorAll(".unit-card")).map(
-            (card) => ({
-              name: card
-                .querySelector('input[name="unit_name[]"]')
-                .value.trim(),
-              type: card.querySelector('select[name="unit_type[]"]').value,
-            }),
-          )
-        : [],
     };
 
     try {
@@ -279,9 +271,16 @@ export async function handleFormSteps(orgId) {
 
       propertyPayload.agent_id = user.id;
       propertyPayload.organization_id = orgId || null;
+      propertyPayload.client_id = clientId || null;
 
-      await insertProperty(propertyPayload);
-      window.location.href = "dashboard";
+      const insertedProperty = await insertProperty(propertyPayload);
+      const newPropertyId = insertedProperty[0].id;
+
+      if (unitsPayload.length > 0) {
+        await insertUnits(unitsPayload, newPropertyId);
+      }
+
+      window.location.href = clientId ? "client" : "dashboard";
     } catch (err) {
       console.error(err);
       toastMsg(`Publishing aborted: ${err.message}`, "error");

@@ -51,6 +51,16 @@ export async function fetchClients(agentId, organizationId = null) {
   return data;
 }
 
+export async function fetchClientById(clientId) {
+  const { data, error } = await supabase
+    .from("clients")
+    .select("*")
+    .eq("id", clientId)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 /*
 export async function fetchClients(userId) {
   const { data, error } = await supabase

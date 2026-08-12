@@ -35,14 +35,24 @@ export async function removePropertyFromDb(propertyId) {
   if (error) throw error;
 }
 
-
 // Fetch a single unique property profile row
 export async function fetchPropertyById(propertyId) {
-    const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .eq('id', propertyId)
-        .single(); // Gets a single object row back instead of an array
-    if (error) throw error;
-    return data;
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("id", propertyId)
+    .single(); // Gets a single object row back instead of an array
+  if (error) throw error;
+  return data;
+}
+
+//Fetch property by client id
+export async function fetchPropertiesByClientId(clientId) {
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
 }

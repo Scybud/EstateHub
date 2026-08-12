@@ -34,7 +34,7 @@ export async function renderClientsCards(clientsData, onDeleteCallback, userId) 
     return;
   }
 
-  // FIXED: Consistent structure using ONE single grid container OUTSIDE the loop
+  //Consistent structure using ONE single grid container OUTSIDE the loop
   const twoColumnGrid = document.createElement("div");
   twoColumnGrid.classList.add("two-column-grid");
 
@@ -43,15 +43,24 @@ export async function renderClientsCards(clientsData, onDeleteCallback, userId) 
     cardDiv.classList.add("card"); // Fixed to match your standard CSS module styling
 
     cardDiv.innerHTML = `
-      <h3>${client.name || "Unknown Client"}</h3>
-      <p><b>Email:</b> <a href="mailto:${client.email}">${client.email || "N/A"}</a></p>
-      <p><b>Phone:</b> ${client.phone || "N/A"}</p>
-      <div style="margin-top: 15px; display: flex; gap: 8px;">
-          <button type="button" class="danger btn delete-btn" style="background: #ff4444; color: white;">🗑 Delete</button>
-      </div>
-    `;
+  <h3>${client.name || "Unknown Client"}</h3>
+  <p><b>Email:</b> <a href="mailto:${client.email}">${client.email || "N/A"}</a></p>
+  <p><b>Phone:</b> ${client.phone || "N/A"}</p>
+  <div style="margin-top: 15px; display: flex; gap: 8px;">
+      <button type="button" class="btn view-btn">👀 View</button>
+      <button type="button" class="danger btn delete-btn" style="background: #ff4444; color: white;">🗑 Delete</button>
+  </div>
+`;
 
-    // FIXED: Clean event listener binding using querySelector on the isolated node instance
+    cardDiv.querySelector(".view-btn").addEventListener("click", () => {
+      localStorage.setItem("viewClientId", client.id);
+      window.location.href = "client";
+    });
+
+    cardDiv.querySelector(".delete-btn").addEventListener("click", () => {
+      onDeleteCallback(client.id);
+    });
+    
     cardDiv.querySelector(".delete-btn").addEventListener("click", () => {
       onDeleteCallback(client.id);
     });
@@ -60,6 +69,6 @@ export async function renderClientsCards(clientsData, onDeleteCallback, userId) 
     twoColumnGrid.appendChild(cardDiv);
   });
 
-  // FIXED: Appends the fully populated layout target node safely without overwriting headers
+  //  Appends the fully populated layout target node safely without overwriting headers
   container.appendChild(twoColumnGrid);
 }

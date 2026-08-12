@@ -24,16 +24,18 @@ export function renderOverviewStats(propertiesArray) {
   availablePropertyCount.innerText = available;
 }
 
-export async function renderPropertyCards(propertiesArray, onDeleteClick, orgId) {
+export async function renderPropertyCards(
+  propertiesArray,
+  onDeleteClick,
+  orgId,
+  clientId = null,
+) {
   const detailsCard = document.getElementById("container");
   if (!detailsCard) return;
 
-      detailsCard.innerHTML = "";
+  detailsCard.innerHTML = "";
 
   if (propertiesArray.length === 0) {
-    detailsCard.innerHTML = "";
-
-    
     await createEmptyState({
       container: detailsCard,
       icon: "🏠",
@@ -45,15 +47,13 @@ export async function renderPropertyCards(propertiesArray, onDeleteClick, orgId)
           "../components/modals/create/add-property",
           "modalContainer",
         );
-        await handleFormSteps(orgId);
-
+        await handleFormSteps(orgId, clientId);
       },
     });
     return;
   }
 
-
-  // FIXED: Create ONE single grid container OUTSIDE the loop
+  //Create ONE single grid container OUTSIDE the loop
   const twoColumnGrid = document.createElement("div");
   twoColumnGrid.classList.add("two-column-grid");
 

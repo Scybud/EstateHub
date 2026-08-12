@@ -27,6 +27,8 @@ button, .submit-btn, .btn-next, .btn-prev, .btn {
   cursor: pointer;
   color: #000;
   transition: transform 0.25s, box-shadow 0.25s;
+  padding: var(--space-sm);
+  text-align: center;
 }
 button:hover {
   transform: translate(0);

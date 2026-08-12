@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client | PropDek</title>
+    <meta name="author" content="PropDek Team" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!--SCYBUD UI-->
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/variables.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/layout.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/typography.css"
+    />
+
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components/buttons.css" />
+    <link rel="stylesheet" href="../css/components/card.css">
+      <link rel="stylesheet" href="../css/components/form.css">
+      
+    <!--FAVICONS-->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicons/favicon-16x16.png"
+    />
+
+
+  </head>
+  <body>
+    <div id="toast"></div>
+    <div id="modalContainer"></div>
+
+    <button type="button" class="btn backBtn btn-sm" onclick="history.back()">← Back</button>
+    <h2 style="text-align:center; margin: var(--space-xl) 0;">Client Profile</h2>
+
+    <div id="clientDetails" style="max-width:650px; margin: 0 auto 40px;">
+      <p class="loading-text">Fetching client record...</p>
+    </div>
+
+    <div id="app-content" style="max-width:900px; margin:0 auto;">
+      <section id="property-table-section">
+        <div class="section-header">
+          <h2>Assets</h2>
+          <button type="button" class="btn-primary btn btn-sm add-property">+ Add Property</button>
+        </div>
+        <div id="container"></div>
+      </section>
+    </div>
+
+    <script type="module" src="../js/session.js"></script>
+    <script type="module" src="../js/app.js"></script>
+    <script type="module" src="../js/auth/auth.js"></script>
+    <script type="module" src="../js/clients/clientDetails.js"></script>
+  </body>
+</html>

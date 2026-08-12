@@ -1,20 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta http-equiv="refresh" content="0; url=/app/dashboard">
-    <meta name="robots" content="noindex, nofollow">
+        <meta http-equiv="refresh" content="0; url=/app/dashboard">
+    <meta name="robots" content="noindex, nofollow" />
 
-    <title>Redirecting...</title>
+    <title>PropDek</title>
+
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/variables.css"
+    />
+    <link rel="stylesheet" href="../css/base.css" />
 
     <!-- FAVICONS -->
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/favicon-16x16.png">
-</head>
-<body>
-    Redirecting...
-</body>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicons/favicon-16x16.png"
+    />
+
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .card {
+        background: var(--surface-primary);
+        width: 100%;
+        max-width: 300px;
+        height: 100px;
+        border-radius: var(--radius-md);
+font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .logo a {
+                color: var(--text-primary);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1 class="logo"><a href="dashboard">Prop<span>Dek</span></a></h1>
+    </div>
+  </body>
 </html>

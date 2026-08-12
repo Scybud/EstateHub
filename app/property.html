@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
     <title>Property Details | PropDek</title>
-<meta name="author" content="PropDek Team" />
-<meta name="robots" content="noindex, nofollow" />
+    <meta name="author" content="PropDek Team" />
+    <meta name="robots" content="noindex, nofollow" />
 
     <!--SCYBUD UI-->
     <link
@@ -21,15 +21,34 @@
       href="https://scybud.github.io/scybud-ui/css/typography.css"
     />
 
-
-    <link rel="stylesheet" href="../css/base.css">
+       <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components/sidebar.css">
+    <link rel="stylesheet" href="../css/components/card.css">
+      <link rel="stylesheet" href="../css/components/form.css">
       <link rel="stylesheet" href="../css/components/buttons.css">
+<link rel="stylesheet" href="../css/components/toast.css">
+
 
     <!--FAVICONS-->
-<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/favicon-16x16.png">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicons/favicon-16x16.png"
+    />
 
     <style>
       /* Reset */
@@ -69,7 +88,7 @@
         backdrop-filter: blur(6px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         animation: fadeIn 0.4s ease-in-out;
-          }
+      }
 
       /* Typography */
       #details h3 {
@@ -126,15 +145,17 @@
       }
 
       /* Back Button */
-      .btn {
+      .backBtn {
         position: fixed;
         left: var(--space-lg);
-
+        z-index: 1;
         padding: 12px 25px;
         border-radius: var(--radius-sm);
         border: none;
         color: #000;
-        transition: transform 0.25s, box-shadow 0.25s;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
       }
 
       .btn:hover {
@@ -161,90 +182,88 @@
       }
 
       /* Expanded max width to hold text and map gracefully side-by-side or stacked */
-  #details {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 230, 0, 0.2);
-    padding: 25px;
-    width: 100%;
-    max-width: 650px; /* Slight size bump for map layouts */
-    border-radius: 12px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    animation: fadeIn 0.4s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+      #details {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 230, 0, 0.2);
+        padding: 25px;
+        width: 100%;
+        max-width: 650px; /* Slight size bump for map layouts */
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        animation: fadeIn 0.4s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
 
-  /* Map Container Placement styling */
-  .map-section {
-    position: relative;
-    margin-top: 15px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-    padding-top: 15px;
-  }
+      /* Map Container Placement styling */
+      .map-section {
+        position: relative;
+        margin-top: 15px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        padding-top: 15px;
+      }
 
-  .map-section h4 {
-    color: #ffe600;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-  }
-.expand-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-  .map-frame-wrapper {
-    width: 100%;
-    height: 250px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #151515;
-  }
+      .map-section h4 {
+        color: #ffe600;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+      }
+      .expand-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      .map-frame-wrapper {
+        width: 100%;
+        height: 250px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #151515;
+      }
 
-  .map-frame-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    /* Optional sleek dark layout filter blend to match your theme perfectly */
-    filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%);
-  }
+      .map-frame-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        /* Optional sleek dark layout filter blend to match your theme perfectly */
+        filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%);
+      }
 
-  .map-modal-card {
-    width: 90%;
-    height: 90%;
-    padding: var(--space-xl);
-    position: relative;
-  }
+      .map-modal-card {
+        width: 90%;
+        height: 90%;
+        padding: var(--space-xl);
+        position: relative;
+      }
 
-  @media (max-width: 600px) {
-    .map-modal-card {
-    width: 100%;
-    padding: var(--space-sm);
-  }
-  }
-  .expanded-map-frame-wrapper {
-     width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .expanded-map-frame-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-  }
+      @media (max-width: 600px) {
+        .map-modal-card {
+          width: 100%;
+          padding: var(--space-sm);
+        }
+      }
+      .expanded-map-frame-wrapper {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .expanded-map-frame-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+      }
     </style>
   </head>
   <body>
-
     <!--TOAST MESSAGES-->
-        <div id="toast"></div>
-<!--MODAL CONTAINER-->
+    <div id="toast"></div>
+    <!--MODAL CONTAINER-->
     <div id="modalContainer"></div>
-
 
     <button type="button" class="btn backBtn btn-sm">← Back</button>
     <h2>Property Details</h2>
@@ -253,10 +272,9 @@
       <p class="loading-text">Fetching live database record...</p>
     </div>
 
-
     <script type="module" src="../js/session.js"></script>
-<script type="module" src="../js/app.js"></script>
-        <script type="module" src="../js/auth/auth.js"></script>
+    <script type="module" src="../js/app.js"></script>
+    <script type="module" src="../js/auth/auth.js"></script>
     <script type="module" src="../js/dashboard/propertyDetails.js"></script>
   </body>
 </html>
