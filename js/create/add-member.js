@@ -43,7 +43,7 @@ export async function handleMemberInvite(userId, orgId) {
       await insertOrgInvites(orgInvitePayload);
 
       const baseUrl = window.location.origin; // Automatically uses localhost or app.loghue.com
-      const inviteUrl = `${baseUrl}/join/index?token=${token}`;
+      const inviteUrl = `${baseUrl}/app/join/index?token=${token}`;
 
       const {
         data: { session },
