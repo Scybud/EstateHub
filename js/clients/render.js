@@ -47,15 +47,11 @@ export async function renderClientsCards(clientsData, onDeleteCallback, userId) 
   <p><b>Email:</b> <a href="mailto:${client.email}">${client.email || "N/A"}</a></p>
   <p><b>Phone:</b> ${client.phone || "N/A"}</p>
   <div style="margin-top: 15px; display: flex; gap: 8px;">
-      <button type="button" class="btn view-btn">👀 View</button>
+      <a href="client?c=${client.id}" type="button" class="btn view-btn">View</a>
       <button type="button" class="danger btn delete-btn" style="background: #ff4444; color: white;">🗑 Delete</button>
   </div>
 `;
 
-    cardDiv.querySelector(".view-btn").addEventListener("click", () => {
-      localStorage.setItem("viewClientId", client.id);
-      window.location.href = "client";
-    });
 
     cardDiv.querySelector(".delete-btn").addEventListener("click", () => {
       onDeleteCallback(client.id);

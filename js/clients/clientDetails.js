@@ -10,7 +10,8 @@ import { handleFormSteps } from "../create/add-property.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const detailsDiv = document.getElementById("clientDetails");
-  const clientId = localStorage.getItem("viewClientId");
+    const params = new URLSearchParams(window.location.search);
+    const clientId = params.get("c");
 
   if (!clientId) {
     detailsDiv.innerHTML = `<p style="text-align:center; color:#ef4444;">No client selected. Please return to your client list.</p>`;

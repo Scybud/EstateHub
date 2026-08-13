@@ -114,42 +114,51 @@ async function renderUnits(units) {
   if (!unitsList) return;
 
   if (units.length === 0) {
-    unitsList.innerHTML = `<p style="font-size:0.85rem; color:#a0aec0; font-style:italic;">No independent sub-units assigned to this workspace listing.</p>`;
+    unitsList.innerHTML = `<p class="data-list-empty">No independent sub-units assigned to this workspace listing.</p>`;
     return;
   }
 
   unitsList.innerHTML = "";
+  const grid = document.createElement("div");
+  grid.classList.add("pill-grid");
+  unitsList.appendChild(grid);
 
   for (const unit of units) {
-    const unitBlock = document.createElement("div");
-    unitBlock.classList.add("unit-pill");
-    unitBlock.style.marginBottom = "10px";
+    const pill = document.createElement("div");
+    pill.classList.add("data-pill");
 
     const tenants = await fetchTenantsByUnitId(unit.id);
 
     const tenantsHTML = tenants.length
-      ? tenants
+      ? `<div class="data-list" style="margin-top:8px;">` +
+        tenants
           .map(
             (t) => `
-          <div class="tenant-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
-            <span>${escapeHTML(t.name)} · ${escapeHTML(t.phone)} · ₦${Number(t.rent || 0).toLocaleString("en-NG")} · ${escapeHTML(t.lease_start)} to ${escapeHTML(t.lease_end)}</span>
-            <button type="button" class="danger btn btn-sm remove-tenant-btn" data-tenant-id="${t.id}">🗑</button>
+          <div class="data-list-row">
+            <div class="row-main">
+              <span class="row-title">${escapeHTML(t.name)}</span>
+              <span class="row-meta">${escapeHTML(t.phone)} · ₦${Number(t.rent || 0).toLocaleString("en-NG")} · ${escapeHTML(t.lease_start)} to ${escapeHTML(t.lease_end)}</span>
+            </div>
+            <div class="row-actions">
+              <button type="button" class="danger btn btn-sm remove-tenant-btn" data-tenant-id="${t.id}">🗑</button>
+            </div>
           </div>
         `,
           )
-          .join("")
-      : `<p style="font-size:0.8rem; color:#a0aec0; font-style:italic; margin-top:6px;">No tenant assigned.</p>`;
+          .join("") +
+        `</div>`
+      : `<p class="data-list-empty">No tenant assigned.</p>`;
 
-    unitBlock.innerHTML = `
-      <strong>${escapeHTML(unit.name)}</strong>
-      <span>${escapeHTML(unit.type)}</span>
-      <div class="unit-tenants">${tenantsHTML}</div>
+    pill.innerHTML = `
+      <span class="pill-title">${escapeHTML(unit.name)}</span>
+      <span class="pill-subtitle">${escapeHTML(unit.type)}</span>
+      ${tenantsHTML}
       <button type="button" class="btn btn-sm add-tenant-btn" style="margin-top:8px;">+ Add Tenant</button>
     `;
 
-    unitsList.appendChild(unitBlock);
+    grid.appendChild(pill);
 
-    unitBlock.querySelectorAll(".remove-tenant-btn").forEach((btn) => {
+    pill.querySelectorAll(".remove-tenant-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         if (confirm("Remove this tenant?")) {
           await removeTenantFromDb(btn.dataset.tenantId);
@@ -162,7 +171,7 @@ async function renderUnits(units) {
       });
     });
 
-    unitBlock
+    pill
       .querySelector(".add-tenant-btn")
       .addEventListener("click", async () => {
         await loadComponent(

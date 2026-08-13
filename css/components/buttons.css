@@ -42,6 +42,7 @@ button:disabled {
   align-items: center;
 }
 .btn.btn-sm {
+  width: fit-content;
   font-size: var(--text-sm);
   font-weight: 550;
   padding: var(--space-xs) var(--space-md);

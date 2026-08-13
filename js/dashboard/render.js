@@ -3,7 +3,10 @@
  * @param {Array} propertiesArray - Collection array matching properties row schemas
  * @param {Function} onDeleteClick - Action callback forwarding the unique instance target UUID
  */
-      import { loadComponent, createEmptyState } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import {
+  loadComponent,
+  createEmptyState,
+} from "https://ui.scybud.com/js/ui.js";
 import { handleFormSteps } from "../create/add-property.js";
 import { escapeHTML } from "../utils/escapeHTML.js";
 
@@ -12,7 +15,6 @@ export function renderOverviewStats(propertiesArray) {
   const availablePropertyCount = document.getElementById(
     "availablePropertyCount",
   );
-
 
   const total = propertiesArray.length;
   const rented = propertiesArray.filter(
@@ -30,14 +32,14 @@ export async function renderPropertyCards(
   orgId,
   clientId = null,
 ) {
-  const detailsCard = document.getElementById("container");
-  if (!detailsCard) return;
+  const container = document.getElementById("container");
+  if (!container) return;
 
-  detailsCard.innerHTML = "";
+  container.innerHTML = "";
 
   if (propertiesArray.length === 0) {
     await createEmptyState({
-      container: detailsCard,
+      container: container,
       icon: "🏠",
       title: "Nothing here yet",
       description: "You have not added a property yet.",
@@ -53,63 +55,63 @@ export async function renderPropertyCards(
     return;
   }
 
-  //Create ONE single grid container OUTSIDE the loop
-  const twoColumnGrid = document.createElement("div");
-  twoColumnGrid.classList.add("two-column-grid");
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("data-table-wrapper");
+
+  const table = document.createElement("table");
+  table.classList.add("data-table");
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Rent</th>
+        <th>Units</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+
+  const tbody = table.querySelector("tbody");
 
   propertiesArray.forEach((property) => {
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("card", "property-card");
-
     let statusBadgeClass = "for-sale";
     if (property.status?.toLowerCase() === "rented")
       statusBadgeClass = "rented";
     if (property.status?.toLowerCase() === "leased")
       statusBadgeClass = "leased";
 
-    const totalUnitsCount = Array.isArray(property.internal_units_json)
-      ? property.internal_units_json.length
-      : 0;
-
-    const beds = property.bedrooms ?? 0;
-    const baths = property.bathrooms ?? 0;
-    const size = property.floor_space_sqm
-      ? `${property.floor_space_sqm} sqm`
-      : "N/A";
-
-    cardDiv.innerHTML = `
-      <h3>${escapeHTML(property.owner_name) || "Client Asset"}</h3>
-      <p><b>Title:</b> ${escapeHTML(property.title) || "Untitled Asset"}</p>
-      <p><b>Property Type:</b> ${escapeHTML(property.property_type) || "Unspecified"}</p>
-      <p>
-          <b>Property Status:</b> 
-          <span class="status-badge ${statusBadgeClass}">${escapeHTML(property.status) || "available"}</span>
-      </p>
-      <p><b>Specs:</b> 🛏️ ${beds} Beds | 🛁 ${baths} Baths | 📐 ${size}</p>
-      <p>
-          <b>Managed Capacity:</b> 
-          <span class="unit-counter-badge">${totalUnitsCount} Units</span>
-      </p>
-      <p><b>Rent Valuation:</b> ₦${Number(property.list_price || 0).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</p>
-      <div class="card-actions">
-          <button type="button" class="action-view-btn btn view-btn">👀 View</button>
-          <button type="button" class="danger btn delete-btn">🗑 Remove</button>
-      </div>
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td data-label="Property">
+        <strong>${escapeHTML(property.title) || "Untitled Asset"}</strong>
+        <br />
+        <span class="cell-muted">${escapeHTML(property.property_type) || "Unspecified"}</span>
+      </td>
+      <td data-label="Owner">${escapeHTML(property.owner_name) || "Client Asset"}</td>
+      <td data-label="Status"><span class="status-badge ${statusBadgeClass}">${escapeHTML(property.status) || "available"}</span></td>
+      <td data-label="Rent">₦${Number(property.list_price || 0).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</td>
+      <td data-label="Units"><span class="unit-counter-badge">${property.units_count ?? 0} Units</span></td>
+      <td class="cell-actions">
+        <button type="button" class="btn btn-sm view-btn">View</button>
+        <button type="button" class="danger btn btn-sm delete-btn">Remove</button>
+      </td>
     `;
 
-    cardDiv.querySelector(".view-btn").addEventListener("click", () => {
+    row.querySelector(".view-btn").addEventListener("click", () => {
       localStorage.setItem("viewPropertyId", property.id);
       window.location.href = "property";
     });
 
-    cardDiv.querySelector(".delete-btn").addEventListener("click", () => {
+    row.querySelector(".delete-btn").addEventListener("click", () => {
       onDeleteClick(property.id);
     });
 
-    // Append each individual card into the single parent grid container
-    twoColumnGrid.appendChild(cardDiv);
+    tbody.appendChild(row);
   });
 
-  // Prepend the fully populated grid layout container into the main DOM target
-  detailsCard.prepend(twoColumnGrid);
+  wrapper.appendChild(table);
+  container.appendChild(wrapper);
 }

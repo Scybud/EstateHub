@@ -26,8 +26,11 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/components/buttons.css" />
     <link rel="stylesheet" href="../css/components/card.css">
+    <link rel="stylesheet" href="../css/components/toast.css">
+    <link rel="stylesheet" href="../css/components/emptyState.css">
       <link rel="stylesheet" href="../css/components/form.css">
-      
+      <link rel="stylesheet" href="../css/components/data-table.css">
+
     <!--FAVICONS-->
     <link
       rel="apple-touch-icon"
@@ -47,7 +50,17 @@
       href="../assets/favicons/favicon-16x16.png"
     />
 
-
+<style>
+  #clientDetails {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin: 0 var(--space-md);
+  }
+  #app-content {
+    padding-top: 0;
+  }
+</style>
   </head>
   <body>
     <div id="toast"></div>
