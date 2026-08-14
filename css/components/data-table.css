@@ -1,6 +1,6 @@
-/* ==========================================================================
+/* 
    DATA TABLE — for multi-field record lists (properties, org members)
-   ========================================================================== */
+    */
 .data-table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -93,9 +93,9 @@
   }
 }
 
-/* ==========================================================================
+/* 
    COMPACT LIST ROWS — for nested lower-tier records (tenants within a unit)
-   ========================================================================== */
+    */
 .data-list {
   display: flex;
   flex-direction: column;
@@ -143,9 +143,9 @@
   padding: var(--space-sm) 0;
 }
 
-/* ==========================================================================
+/* 
    PILL GRID — for lightweight tag-like records (units within a property)
-   ========================================================================== */
+    */
 .pill-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
