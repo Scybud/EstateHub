@@ -5,13 +5,13 @@ import {
 } from "../data/propertiesDb.js";
 import { renderPropertyCards } from "../dashboard/render.js";
 import { escapeHTML } from "../utils/escapeHTML.js";
-import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import { loadComponent } from "https://ui.scybud.com/js/ui.js";
 import { handleFormSteps } from "../create/add-property.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const detailsDiv = document.getElementById("clientDetails");
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get("c");
+  const params = new URLSearchParams(window.location.search);
+  const clientId = params.get("client");
 
   if (!clientId) {
     detailsDiv.innerHTML = `<p style="text-align:center; color:#ef4444;">No client selected. Please return to your client list.</p>`;

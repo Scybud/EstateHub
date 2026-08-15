@@ -1,6 +1,7 @@
 // js/create/add-property.js
 import { insertProperty } from "../data/propertiesDb.js";
 import { insertUnits } from "../data/unitsDb.js";
+import { fetchClientById } from "../data/clientsDb.js";
 import { supabase } from "../supabase.js";
 import { toastMsg } from "../components/toast.js";
 
@@ -16,6 +17,15 @@ export async function handleFormSteps(orgId, clientId = null) {
 
   let currentStep = 1;
   let unitCount = 0;
+
+  if (clientId) {
+    fetchClientById(clientId)
+      .then((client) => {
+        const nameEl = document.getElementById("formClientName");
+        if (nameEl && client) nameEl.innerText = client.name;
+      })
+      .catch((err) => console.error("Failed to load client name:", err));
+  }
 
   function updateFormState() {
     steps.forEach((step) => {
@@ -229,7 +239,6 @@ export async function handleFormSteps(orgId, clientId = null) {
 
     const propertyPayload = {
       title: document.getElementById("title").value.trim(),
-      owner_name: document.getElementById("owner_name").value.trim(),
       description: document.getElementById("description").value.trim() || null,
 
       property_type: document.getElementById("property_type").value || null,
@@ -280,7 +289,7 @@ export async function handleFormSteps(orgId, clientId = null) {
         await insertUnits(unitsPayload, newPropertyId);
       }
 
-      window.location.href = clientId ? "client" : "dashboard";
+      window.location.reload();
     } catch (err) {
       console.error(err);
       toastMsg(`Publishing aborted: ${err.message}`, "error");

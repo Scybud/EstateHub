@@ -35,6 +35,7 @@ export async function renderPropertyCards(
   const container = document.getElementById("container");
   if (!container) return;
 
+  container.innerHTML = "";
 
   if (propertiesArray.length === 0) {
     await createEmptyState({
@@ -67,7 +68,7 @@ export async function renderPropertyCards(
         <th>Status</th>
         <th>Rent</th>
         <th>Units</th>
-        <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -94,15 +95,10 @@ export async function renderPropertyCards(
       <td data-label="Rent">₦${Number(property.list_price || 0).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</td>
       <td data-label="Units"><span class="unit-counter-badge">${property.units_count ?? 0} Units</span></td>
       <td class="cell-actions">
-        <button type="button" class="btn btn-sm view-btn">View</button>
+        <a href="property?property=${property.id}" class="btn btn-sm view-btn">View</a>
         <button type="button" class="danger btn btn-sm delete-btn">Remove</button>
       </td>
     `;
-
-    row.querySelector(".view-btn").addEventListener("click", () => {
-      localStorage.setItem("viewPropertyId", property.id);
-      window.location.href = "property";
-    });
 
     row.querySelector(".delete-btn").addEventListener("click", () => {
       onDeleteClick(property.id);

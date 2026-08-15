@@ -2,12 +2,11 @@ import { toastMsg } from "../components/toast.js";
 import { insertTenant } from "../data/tenantsDb.js";
 import { sessionState } from "../session.js";
 
-export async function handleAddTenantSubmit(unitId, onSuccessCallback) {
+export async function handleAddTenantSubmit(target, onSuccessCallback) {
+  // target is { unit_id } or { property_id }
   const form = document.getElementById("addTenantForm");
   const modalContainer = document.getElementById("modalContainer");
   if (!form) return;
-
-  const agentId = sessionState.user.id;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -24,6 +23,8 @@ export async function handleAddTenantSubmit(unitId, onSuccessCallback) {
       return;
     }
 
+    const agentId = await sessionState.user.id;
+
     try {
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -31,13 +32,13 @@ export async function handleAddTenantSubmit(unitId, onSuccessCallback) {
       }
 
       await insertTenant({
-        unit_id: unitId,
-        agent_id: agentId,
+        ...target,
         name,
         phone,
         rent,
         lease_start: leaseStart,
         lease_end: leaseEnd,
+        agent_id: agentId
       });
 
       toastMsg("Tenant added successfully!", "success");

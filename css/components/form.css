@@ -83,7 +83,14 @@ legend {
   font-size: 1.2rem;
 }
 
-
+form .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  float: right;
+  align-self: flex-end;
+}
 
 /* Wizard Visibility Rules */
 .form-step {

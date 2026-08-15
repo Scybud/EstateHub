@@ -5,7 +5,7 @@ export async function insertUnits(unitsArray, propertyId) {
   const payload = unitsArray.map((u) => ({
     property_id: propertyId,
     name: u.name,
-    unit_type: u.type,
+    type: u.unit_type,
   }));
   const { data, error } = await supabase.from("units").insert(payload).select();
   if (error) throw error;

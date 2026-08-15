@@ -26,13 +26,13 @@ button, .submit-btn, .btn-next, .btn-prev, .btn {
   background: var(--primary);
   cursor: pointer;
   color: #000;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.25s;
   padding: var(--space-sm);
   text-align: center;
 }
-button:hover {
-  transform: translate(0);
-}
+.btn:hover {
+background: var(--primary-light);
+      }
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;

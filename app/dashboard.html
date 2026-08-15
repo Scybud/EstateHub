@@ -100,61 +100,50 @@
     <div id="app-content">
 
       <section id="statsCards">
-        <div id="rentedProperty" class="statsCard">
-          <h3>Rented / Leased</h3>
-          <p id="rentedPropertyCount">0</p>
-        </div>
-        <div id="availableProperty" class="statsCard">
-          <h3>Available</h3>
-          <p id="availablePropertyCount">0</p>
-        </div>
-      </section>
+  <div class="statsCard">
+    <h3>Clients</h3>
+    <p id="clientCount">0</p>
+  </div>
+  <div class="statsCard">
+    <h3>Properties</h3>
+    <p id="propertyCount">0</p>
+  </div>
+  <div class="statsCard">
+    <h3>Rented</h3>
+    <p id="rentedCount">0</p>
+  </div>
+  <div class="statsCard">
+    <h3>Available</h3>
+    <p id="availableCount">0</p>
+  </div>
+</section>
 
       
       <section id="property-table-section">
-        <div class="section-header"><h2>Assets</h2> <button type="button" class="btn-primary btn btn-sm add-property"><svg
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    d="M12 5V19M5 12H19"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-</svg>
-Add Property</button></div>
-
-        <div id="container"></div>
-      </section>
+  <div class="section-header"><h2>Clients</h2> <button type="button" class="btn-primary btn btn-sm add-client">+ Add Client</button></div>
+  <div id="container"></div>
+</section>
     </div>
 
     <script type="module">
-      import { initDashboard } from '../js/dashboard/dashboard.js';
-      import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
-      import { handleFormSteps } from "../js/create/add-property.js";
+  import { initDashboard } from '../js/dashboard/dashboard.js';
+  import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
+  import { handlePersonalClientSubmit } from "../js/create/add-client.js";
+  import { supabase } from "../js/supabase.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-          // Fire core dashboard fetch logic loops
-          initDashboard();
+  document.addEventListener("DOMContentLoaded", async () => {
+    initDashboard();
 
-          // Bind modal actions
-          const addPropertyBtn = document.querySelectorAll(".add-property");
-          addPropertyBtn.forEach((btn) => {
-              btn.addEventListener("click", async () => {
-                  await loadComponent(
-                      "../components/modals/create/add-property",
-                      "modalContainer"
-                  );
-                  await handleFormSteps();
-              });
-          });
+    const addClientBtn = document.querySelectorAll(".add-client");
+    addClientBtn.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        await loadComponent("../components/modals/create/add-client", "modalContainer");
+        await handlePersonalClientSubmit(user.id, async () => { await initDashboard(); });
       });
-    </script>
+    });
+  });
+</script>
 
 
 <script type="module" src="../js/session.js"></script>

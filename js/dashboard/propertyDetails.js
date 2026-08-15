@@ -1,6 +1,10 @@
 import { fetchPropertyById } from "../data/propertiesDb.js";
 import { fetchUnitsByPropertyId } from "../data/unitsDb.js";
-import { fetchTenantsByUnitId, removeTenantFromDb } from "../data/tenantsDb.js";
+import {
+  fetchTenantsByUnitId,
+  fetchTenantsByPropertyId,
+  removeTenantFromDb,
+} from "../data/tenantsDb.js";
 import { escapeHTML } from "../utils/escapeHTML.js";
 import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
 import { handleAddTenantSubmit } from "../create/add-tenant.js";
@@ -8,7 +12,8 @@ import { toastMsg } from "../components/toast.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const detailsDiv = document.getElementById("details");
-  const propertyId = localStorage.getItem("viewPropertyId");
+  const params = new URLSearchParams(window.location.search);
+  const propertyId = params.get("property");
 
   if (!propertyId) {
     detailsDiv.innerHTML = `<p style="text-align:center; color:#ef4444;">No target property selected. Please return to the dashboard.</p>`;
@@ -38,11 +43,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p><strong>Lease Expiry:</strong> ${expiryDate}</p>
       <p><strong>Asset ID:</strong> <code style="color:#cbd5e1; font-family:monospace; font-size:0.8rem;">${escapeHTML(property.id)}</code></p>
       <p><strong>Internal Description / Notes:</strong><br>${escapeHTML(property.description || "No descriptions saved for this asset.")}</p>
-      <div class="units-section">
-        <h4>Units (${units.length})</h4>
-        <div id="unitsList"></div>
-      </div>
     `;
+
+    if (units.length > 0) {
+      detailsHTML += `
+        <div class="units-section">
+          <h4>Units (${units.length})</h4>
+          <div id="unitsList"></div>
+        </div>
+      `;
+    } else {
+      detailsHTML += `
+        <div class="units-section">
+          <h4>Tenants</h4>
+          <div id="propertyTenantsList"></div>
+          <button type="button" id="addPropertyTenantBtn" class="btn btn-sm" style="margin-top:8px;">+ Add Tenant</button>
+        </div>
+      `;
+    }
 
     let lat = null;
     let lon = null;
@@ -75,7 +93,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     detailsDiv.innerHTML = detailsHTML;
 
-    await renderUnits(units);
+    if (units.length > 0) {
+      await renderUnits(units, propertyId);
+    } else {
+      await renderPropertyTenants(propertyId);
+      document
+        .getElementById("addPropertyTenantBtn")
+        .addEventListener("click", async () => {
+          await loadComponent(
+            "../components/modals/create/add-tenant",
+            "modalContainer",
+          );
+          await handleAddTenantSubmit({ property_id: propertyId }, async () => {
+            await renderPropertyTenants(propertyId);
+          });
+        });
+    }
 
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("#openMapModal");
@@ -109,14 +142,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-async function renderUnits(units) {
+async function renderUnits(units, propertyId) {
   const unitsList = document.getElementById("unitsList");
   if (!unitsList) return;
-
-  if (units.length === 0) {
-    unitsList.innerHTML = `<p class="data-list-empty">No independent sub-units assigned to this workspace listing.</p>`;
-    return;
-  }
 
   unitsList.innerHTML = "";
   const grid = document.createElement("div");
@@ -140,7 +168,18 @@ async function renderUnits(units) {
               <span class="row-meta">${escapeHTML(t.phone)} · ₦${Number(t.rent || 0).toLocaleString("en-NG")} · ${escapeHTML(t.lease_start)} to ${escapeHTML(t.lease_end)}</span>
             </div>
             <div class="row-actions">
-              <button type="button" class="danger btn btn-sm remove-tenant-btn" data-tenant-id="${t.id}">🗑</button>
+              <button type="button" class="danger btn btn-sm remove-tenant-btn" data-tenant-id="${t.id}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Lid -->
+  <path d="M3 6h18" />
+  <path d="M8 6l1-2h6l1 2" />
+  <!-- Bin -->
+  <rect x="5" y="6" width="14" height="14" rx="2" />
+  <!-- Lines -->
+  <path d="M10 11v6" />
+  <path d="M14 11v6" />
+</svg>
+</button>
             </div>
           </div>
         `,
@@ -163,10 +202,8 @@ async function renderUnits(units) {
         if (confirm("Remove this tenant?")) {
           await removeTenantFromDb(btn.dataset.tenantId);
           toastMsg("Tenant removed", "success");
-          const refreshedUnits = await fetchUnitsByPropertyId(
-            localStorage.getItem("viewPropertyId"),
-          );
-          await renderUnits(refreshedUnits);
+          const refreshedUnits = await fetchUnitsByPropertyId(propertyId);
+          await renderUnits(refreshedUnits, propertyId);
         }
       });
     });
@@ -178,12 +215,61 @@ async function renderUnits(units) {
           "../components/modals/create/add-tenant",
           "modalContainer",
         );
-        await handleAddTenantSubmit(unit.id, async () => {
-          const refreshedUnits = await fetchUnitsByPropertyId(
-            localStorage.getItem("viewPropertyId"),
-          );
-          await renderUnits(refreshedUnits);
+        await handleAddTenantSubmit({ unit_id: unit.id }, async () => {
+          const refreshedUnits = await fetchUnitsByPropertyId(propertyId);
+          await renderUnits(refreshedUnits, propertyId);
         });
       });
   }
+}
+
+async function renderPropertyTenants(propertyId) {
+  const list = document.getElementById("propertyTenantsList");
+  if (!list) return;
+
+  const tenants = await fetchTenantsByPropertyId(propertyId);
+
+  if (tenants.length === 0) {
+    list.innerHTML = `<p class="data-list-empty">No tenant assigned.</p>`;
+    return;
+  }
+
+  list.innerHTML =
+    `<div class="data-list">` +
+    tenants
+      .map(
+        (t) => `
+      <div class="data-list-row">
+        <div class="row-main">
+          <span class="row-title">${escapeHTML(t.name)}</span>
+          <span class="row-meta">${escapeHTML(t.phone)} · ₦${Number(t.rent || 0).toLocaleString("en-NG")} · ${escapeHTML(t.lease_start)} to ${escapeHTML(t.lease_end)}</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="danger btn btn-sm remove-property-tenant-btn" data-tenant-id="${t.id}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Lid -->
+  <path d="M3 6h18" />
+  <path d="M8 6l1-2h6l1 2" />
+  <!-- Bin -->
+  <rect x="5" y="6" width="14" height="14" rx="2" />
+  <!-- Lines -->
+  <path d="M10 11v6" />
+  <path d="M14 11v6" />
+</svg></button>
+        </div>
+      </div>
+    `,
+      )
+      .join("") +
+    `</div>`;
+
+  list.querySelectorAll(".remove-property-tenant-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (confirm("Remove this tenant?")) {
+        await removeTenantFromDb(btn.dataset.tenantId);
+        toastMsg("Tenant removed", "success");
+        await renderPropertyTenants(propertyId);
+      }
+    });
+  });
 }
