@@ -52,10 +52,10 @@
   transform: translateX(6px);
 }
 
-.anchor-nav-bar.active, .btn-nav-bar:focus, .btn-nav-bar:active {
-  background-color: #00bcd4;
-  color: #000;
-  font-weight: 700;
+button.active, a.active, .btn-nav-bar:focus, .btn-nav-bar:active {
+   background-color: #00bcd4 !important;
+  color: #000 !important;
+  font-weight: 700 !important;
 }
 .sidebarBottom {
     background: var(--surface-secondary);

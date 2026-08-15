@@ -1,4 +1,5 @@
 import { handleBackBtn } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import {markLinkActive} from "./sidebar.js";
 
 const navBar = document.getElementById("nav-bar");
 
@@ -7,8 +8,8 @@ const loadPageNavs = () => {
 
   const anchors = [
     { text: "Dashboard", href: "dashboard" },
-    { text: "Organisations", href: "orgs" },
     { text: "Clients", href: "clients" },
+    { text: "Organisations", href: "orgs" },
   ];
 
   anchors.forEach((link) => {
@@ -21,5 +22,6 @@ const loadPageNavs = () => {
   });
 };
 loadPageNavs();
+markLinkActive();
 
 handleBackBtn();

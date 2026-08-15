@@ -9,7 +9,7 @@
  * @param {Function} onDeleteCallback - Action callback forwarding the unique instance target UUID
  */
 
-      import { loadComponent, createEmptyState } from "https://scybud.github.io/scybud-ui/js/ui.js";
+      import { loadComponent, createEmptyState } from "https://ui.scybud.com/js/ui.js";
 import { handleOrgCreation } from "../create/create-org.js"; 
 import { handleMemberInvite } from "../create/add-member.js";
 import { handleOrgClientSubmit } from "../create/add-client.js";
@@ -61,7 +61,22 @@ export async function renderOrgsCards(orgsArray, onDeleteClick, userId) {
   <div class="card-actions">
     <a href="org?org=${org.id}" class="btn action-view-btn view-btn">Open</a>
 
-${org.owner_id === userId ? `<button type="button" class="btn delete-btn">🗑 Delete</button>` : ""}
+${
+  org.owner_id === userId
+    ? `<button type="button" class="btn delete-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Lid -->
+  <path d="M3 6h18" />
+  <path d="M8 6l1-2h6l1 2" />
+  <!-- Bin -->
+  <rect x="5" y="6" width="14" height="14" rx="2" />
+  <!-- Lines -->
+  <path d="M10 11v6" />
+  <path d="M14 11v6" />
+</svg>
+ Delete</button>`
+    : ""
+}
   </div>
 `;
 

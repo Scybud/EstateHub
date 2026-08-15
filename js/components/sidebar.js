@@ -1,6 +1,6 @@
 //For side bar display
 const sidebar = document.querySelector(".sidebar");
-function toggleSidebar() {
+export function toggleSidebar() {
   if(!sidebar) return;
   sidebar.classList.toggle("show");
 }
@@ -14,10 +14,13 @@ function goToLink(selectElement) {
 }
 
 // Link glows slightly when active
-const links = document.querySelectorAll("a .anchor-nav-bar");
-const currentPath = window.location.pathname;
+export function markLinkActive() {
 
-links.forEach((link) => {
+  const links = document.querySelectorAll(".sidebar a");
+  const currentPath = window.location.pathname;
+  
+
+  links.forEach((link) => {
   const linkPath = new URL(link.href).pathname;
 
   if(!linkPath) return;
@@ -25,6 +28,7 @@ links.forEach((link) => {
     link.classList.add("active");
   }
 });
+}
 
 
 const dotContainer = document.querySelector(".dot-container");

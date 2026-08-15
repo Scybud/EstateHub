@@ -1,5 +1,10 @@
 import { supabase } from "../supabase.js";
-import { setButtonLoading } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import {
+  handleBackBtn,
+  setButtonLoading,
+} from "https://ui.scybud.com/js/ui.js";
+
+handleBackBtn();
 
 //PASSWORD RESET EMAIL FORM SUBMISSON FUNCTION
 async function sendPasswordResetEmail(email, redirectPage) {

@@ -14,7 +14,7 @@ import {
 import { fetchProperties, removePropertyFromDb } from "../data/propertiesDb.js";
 import { sessionReady, sessionState } from "../session.js";
 import { renderClientsCards, renderMembersCards } from "./render.js";
-import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import { loadComponent } from "https://ui.scybud.com/js/ui.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await sessionReady;
@@ -60,7 +60,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const navBtn = document.createElement("button");
       navBtn.classList.add("btn-nav-bar");
       navBtn.textContent = btn.text;
-      navBtn.onclick = btn.onClick;
+     navBtn.addEventListener("click", async () => {
+       document
+         .querySelectorAll(".btn-nav-bar")
+         .forEach((button) => button.classList.remove("active"));
+
+       navBtn.classList.add("active");
+
+       await btn.onClick();
+     });
       orgNavBar.appendChild(navBtn);
     });
   };

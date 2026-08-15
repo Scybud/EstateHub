@@ -1,6 +1,11 @@
 import { supabase } from "../supabase.js";
 import { toastMsg } from "../components/toast.js";
-import { setButtonLoading } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import {
+  handleBackBtn,
+  setButtonLoading,
+} from "https://ui.scybud.com/js/ui.js";
+
+handleBackBtn();
 
 //Signup funtion
 async function signup(firstName, lastName, email, password) {
