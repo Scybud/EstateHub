@@ -13,17 +13,17 @@
 
 .statsCard {
   display: grid;
+  border: 1px solid var(--border-primary);
   background: var(--surface-primary);
   border-radius: 14px;
   flex: 1;
-  min-width: 200px;
   font-size: 1.2rem;
   padding: 15px;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition: border 0.35s ease, box-shadow 0.35s ease;
 }
 
 .statsCard:hover {
-  transform: translateY(-6px);
+  border: 1px solid var(--border-secondary);
   box-shadow: 0 8px 18px rgba(255, 168, 7, 0.082);
 }
 
