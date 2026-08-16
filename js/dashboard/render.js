@@ -35,7 +35,6 @@ export async function renderPropertyCards(
   const container = document.getElementById("container");
   if (!container) return;
 
-
   if (propertiesArray.length === 0) {
     await createEmptyState({
       container: container,

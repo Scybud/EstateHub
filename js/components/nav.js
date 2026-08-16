@@ -9,6 +9,7 @@ const loadPageNavs = () => {
   const anchors = [
     { text: "Dashboard", href: "dashboard" },
     { text: "Clients", href: "clients" },
+        { text: "Assets", href: "assets" },
     { text: "Organisations", href: "orgs" },
   ];
 

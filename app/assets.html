@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assets | PropDek</title>
+    <meta name="author" content="PropDek Team" />
+<meta name="robots" content="noindex, nofollow" />
+
+    <!--SCYBUD UI-->
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/variables.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/layout.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/components/sidebar/sidebar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/components/buttons/nav-buttons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/css/typography.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/components/buttons/global-buttons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://scybud.github.io/scybud-ui/components/buttons/modals.css"
+    />
+
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components/sidebar.css">
+        <link rel="stylesheet" href="../css/components/card.css">
+      <link rel="stylesheet" href="../css/components/form.css">
+      <link rel="stylesheet" href="../css/components/buttons.css">
+<link rel="stylesheet" href="../css/components/emptyState.css">
+<link rel="stylesheet" href="../css/components/toast.css">
+<link rel="stylesheet" href="../css/components/data-table.css">
+
+<!--FAVICONS-->
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/favicon-16x16.png">
+
+  </head>
+  <header class="header">
+      <div class="menu-icon" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <h1 class="logo">Prop<span>Dek</span></h1>
+  </header>
+
+
+    <aside id="sidebar" class="sidebar">
+      <div id="nav-bar">
+        <!--USE JS TO ADD NAV LINKS-->
+      </div>
+
+      <div class="sidebarBottom">
+          <div class="userInfo">
+
+            <div class="userInfoContent">
+              <p id="userName" class="userName text-bold">Loading...</p>
+              <p id="userEmail" class="userEmail">Loading...</p>
+            </div>
+          </div>
+
+          <button type="button" class="logoutBtn" id="logoutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" 
+     stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M15 3h4v18h-4" />
+  <path d="M10 17l5-5-5-5" />
+  <path d="M15 12H3" />
+</svg>
+</button>
+        </div>
+    </aside>
+  <body>
+    <div class="dot-container"></div>
+         <!--TOAST MESSAGES-->
+        <div id="toast"></div>
+<!--MODAL CONTAINER-->
+    <div id="modalContainer"></div>
+
+
+    <div id="app-content">
+              <div class="section-header"><h2>Assets</h2></div>
+              
+      <section id="content-section">
+
+        <div id="container"></div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { initAssets } from '../js/assets/assets.js';
+      import { loadComponent } from "https://scybud.github.io/scybud-ui/js/ui.js";
+import { sessionState, sessionReady } from "../js/session.js"
+
+      document.addEventListener("DOMContentLoaded", async () => {
+          // Fire core dashboard fetch logic loops
+          initAssets();
+await sessionReady;
+
+          const user = await sessionState.user;
+
+      });
+    </script>
+
+
+<script type="module" src="../js/auth/auth.js"></script>
+<script type="module" src="../js/session.js" defer></script>
+<script type="module" src="../js/app.js" defer></script>
+    <script type="module" src="../js/components/nav.js" defer></script>
+    <script type="module" src="../js/components/sidebar.js" defer></script>
+  </body>
+</html>
